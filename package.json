@@ -2,10 +2,11 @@
   "name": "nodejs",
   "version": "1.0.0",
   "description": "backend nodejs",
-  "main": "server.js",
+  "main": "src/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --exec babel-node src/server.js"
+    "start": "babel-node src/server.js",
+    "dev": "nodemon --exec babel-node src/server.js"
   },
   "keywords": [
     "nodejs",
@@ -31,12 +32,12 @@
     "openai": "^6.15.0",
     "sequelize": "^6.37.7",
     "sharp": "^0.32.6",
-    "uuid": "^8.3.2"
-  },
-  "devDependencies": {
+    "uuid": "^8.3.2",
     "@babel/core": "^7.12.10",
     "@babel/node": "^7.12.1",
-    "@babel/preset-env": "^7.12.10",
+    "@babel/preset-env": "^7.12.10"
+  },
+  "devDependencies": {
     "nodemon": "^2.0.7",
     "sequelize-cli": "^6.6.2"
   }

@@ -1,11 +1,11 @@
 import express from "express";
-import homeController from "../controllers/homeController";
-import userController from "../controllers/userController";
-import doctorController from "../controllers/doctorController";
-import patientController from "../controllers/patientController";
-import specialtyController from "../controllers/specialtyController";
-import chatbotController from "../controllers/chatbotController";
-import statisticalController from "../controllers/statisticalController";
+import homeController from "../controllers/homeController.js";
+import userController from "../controllers/userController.js";
+import doctorController from "../controllers/doctorController.js";
+import patientController from "../controllers/patientController.js";
+import specialtyController from "../controllers/specialtyController.js";
+import chatbotController from "../controllers/chatbotController.js";
+import statisticalController from "../controllers/statisticalController.js";
 
 import verifyToken from "../middleware/authMiddleware";
 
