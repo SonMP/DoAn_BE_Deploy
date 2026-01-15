@@ -1,0 +1,140 @@
+[
+    {
+        "loai": "ROLE",
+        "khoa": "R1",
+        "giaTriEn": "Admin",
+        "giaTriVi": "Quản trị viên"
+    },
+    {
+        "loai": "ROLE",
+        "khoa": "R2",
+        "giaTriEn": "Doctor",
+        "giaTriVi": "Bác sĩ"
+    },
+    {
+        "loai": "ROLE",
+        "khoa": "R3",
+        "giaTriEn": "Patient",
+        "giaTriVi": "Bệnh nhân"
+    },
+    {
+        "loai": "STATUS",
+        "khoa": "S1",
+        "giaTriEn": "New",
+        "giaTriVi": "Lịch hẹn mới"
+    },
+    {
+        "loai": "STATUS",
+        "khoa": "S2",
+        "giaTriEn": "Confirmed",
+        "giaTriVi": "Đã xác nhận"
+    },
+    {
+        "loai": "STATUS",
+        "khoa": "S3",
+        "giaTriEn": "Done",
+        "giaTriVi": "Đã khám xong"
+    },
+    {
+        "loai": "STATUS",
+        "khoa": "S4",
+        "giaTriEn": "Cancel",
+        "giaTriVi": "Đã hủy"
+    },
+    {
+        "loai": "TIME",
+        "khoa": "T1",
+        "giaTriEn": "8:00 AM - 9:00 AM",
+        "giaTriVi": "8:00 - 9:00"
+    },
+    {
+        "loai": "TIME",
+        "khoa": "T2",
+        "giaTriEn": "9:00 AM - 10:00 AM",
+        "giaTriVi": "9:00 - 10:00"
+    },
+    {
+        "loai": "TIME",
+        "khoa": "T3",
+        "giaTriEn": "10:00 AM - 11:00 AM",
+        "giaTriVi": "10:00 - 11:00"
+    },
+    {
+        "loai": "TIME",
+        "khoa": "T4",
+        "giaTriEn": "11:00 AM - 0:00 PM",
+        "giaTriVi": "11:00 - 12:00"
+    },
+    {
+        "loai": "TIME",
+        "khoa": "T5",
+        "giaTriEn": "1:00 PM - 2:00 PM",
+        "giaTriVi": "13:00 - 14:00"
+    },
+    {
+        "loai": "TIME",
+        "khoa": "T6",
+        "giaTriEn": "2:00 PM - 3:00 PM",
+        "giaTriVi": "14:00 - 15:00"
+    },
+    {
+        "loai": "TIME",
+        "khoa": "T7",
+        "giaTriEn": "3:00 PM - 4:00 PM",
+        "giaTriVi": "15:00 - 16:00"
+    },
+    {
+        "loai": "TIME",
+        "khoa": "T8",
+        "giaTriEn": "4:00 PM - 5:00 PM",
+        "giaTriVi": "16:00 - 17:00"
+    },
+    {
+        "loai": "POSITION",
+        "khoa": "P0",
+        "giaTriEn": "Doctor (M.D.)",
+        "giaTriVi": "Bác sĩ"
+    },
+    {
+        "loai": "POSITION",
+        "khoa": "P1",
+        "giaTriEn": "Master",
+        "giaTriVi": "Thạc sĩ"
+    },
+    {
+        "loai": "POSITION",
+        "khoa": "P2",
+        "giaTriEn": "Doctor (Ph.D.)",
+        "giaTriVi": "Tiến sĩ"
+    },
+    {
+        "loai": "POSITION",
+        "khoa": "P3",
+        "giaTriEn": "Associate Professor",
+        "giaTriVi": "Phó giáo sư"
+    },
+    {
+        "loai": "POSITION",
+        "khoa": "P4",
+        "giaTriEn": "Professor",
+        "giaTriVi": "Giáo sư"
+    },
+    {
+        "loai": "GENDER",
+        "khoa": "M",
+        "giaTriEn": "Male",
+        "giaTriVi": "Nam"
+    },
+    {
+        "loai": "GENDER",
+        "khoa": "F",
+        "giaTriEn": "Female",
+        "giaTriVi": "Nữ"
+    },
+    {
+        "loai": "GENDER",
+        "khoa": "O",
+        "giaTriEn": "Other",
+        "giaTriVi": "Khác"
+    }
+]

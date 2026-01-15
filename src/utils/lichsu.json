@@ -1,0 +1,20 @@
+[
+    {
+        "maBenhNhan": 3,
+        "maBacSi": 2,
+        "moTa": "Bệnh nhân kêu đau thắt ngực trái, khó thở khi gắng sức. Tiền sử gia đình có người mắc bệnh tim mạch. Đã chỉ định đo điện tâm đồ (ECG).",
+        "taiLieu": "kq-ecg-benhnhan3-lan1.pdf"
+    },
+    {
+        "maBenhNhan": 3,
+        "maBacSi": 2,
+        "moTa": "Tái khám sau 1 tuần dùng thuốc giãn mạch. Bệnh nhân đỡ khó thở, nhịp tim ổn định 80 lần/phút. Tiếp tục duy trì đơn thuốc cũ.",
+        "taiLieu": "don-thuoc-tuan2.png"
+    },
+    {
+        "maBenhNhan": 3,
+        "maBacSi": 2,
+        "moTa": "Bệnh nhân đến khám định kỳ. Sức khỏe bình thường, các chỉ số huyết áp 120/80 mmHg.",
+        "taiLieu": "kq-kham-tong-quat.pdf"
+    }
+]

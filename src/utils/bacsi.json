@@ -1,0 +1,170 @@
+[
+  {
+    "ho": "Vũ Thị Tư",
+    "ten": "Hằng",
+    "viTri": "TS.BS",
+    "chuyenKhoa": "Nội nhi – Y học cổ truyền",
+    "maChuyenKhoa": 7,
+    "anh": "https://binhdanhospital.vn/wp-content/uploads/2024/08/unnamed.jpg"
+  },
+  {
+    "ho": "Trần Thị Hoa",
+    "ten": "Ban",
+    "viTri": "ThS.BS",
+    "chuyenKhoa": "Nội – Hồi sức cấp cứu",
+    "maChuyenKhoa": 6,
+    "anh": "https://binhdanhospital.vn/wp-content/uploads/2024/09/bac-si-hoa-ban.png"
+  },
+  {
+    "ho": "Đoàn Thị",
+    "ten": "Trinh",
+    "viTri": "BSCKI",
+    "chuyenKhoa": "Nội khoa",
+    "maChuyenKhoa": 1,
+    "anh": "https://binhdanhospital.vn/wp-content/uploads/2024/08/bs-doan-thi-trinh.png"
+  },
+  {
+    "ho": "Nguyễn Trọng",
+    "ten": "Thăng",
+    "viTri": "BS",
+    "chuyenKhoa": "Y học cổ truyền",
+    "maChuyenKhoa": 7,
+    "anh": "https://binhdanhospital.vn/wp-content/uploads/2024/08/Thiet-ke-chua-co-ten.png"
+  },
+  {
+    "ho": "Đặng Thị Thu",
+    "ten": "Thủy",
+    "viTri": "BS",
+    "chuyenKhoa": "Đa khoa",
+    "maChuyenKhoa": 13,
+    "anh": "https://binhdanhospital.vn/wp-content/uploads/2024/09/bs-thuy-chinh.png"
+  },
+  {
+    "ho": "Lương Thị Minh",
+    "ten": "Hạnh",
+    "viTri": "BSCKI",
+    "chuyenKhoa": "Cấp cứu – Khám chữa bệnh",
+    "maChuyenKhoa": 6,
+    "anh": "https://binhdanhospital.vn/wp-content/uploads/2024/09/Thiet-ke-chua-co-ten.png"
+  },
+  {
+    "ho": "Đinh Thị Hoàng",
+    "ten": "Anh",
+    "viTri": "BSCKI",
+    "chuyenKhoa": "Sản Phụ khoa",
+    "maChuyenKhoa": 3,
+    "anh": "https://binhdanhospital.vn/wp-content/uploads/2024/09/bac-si-hoang-anh-1.png"
+  },
+  {
+    "ho": "Lê Thị Hải",
+    "ten": "Yến",
+    "viTri": "BS",
+    "chuyenKhoa": "Nội khoa",
+    "maChuyenKhoa": 1,
+    "anh": "https://binhdanhospital.vn/wp-content/uploads/2024/09/bs-le-thi-yen.png"
+  },
+  {
+    "ho": "Nguyễn Thị Hải",
+    "ten": "Yến",
+    "viTri": "BS",
+    "chuyenKhoa": "Tai Mũi Họng",
+    "maChuyenKhoa": 5,
+    "anh": "https://binhdanhospital.vn/wp-content/uploads/2024/09/Thiet-ke-chua-co-ten-3.png"
+  },
+  {
+    "ho": "Nguyễn Thị",
+    "ten": "Tho",
+    "viTri": "ThS.BS",
+    "chuyenKhoa": "Mô phôi học – Hỗ trợ sinh sản",
+    "maChuyenKhoa": 8,
+    "anh": "https://binhdanhospital.vn/wp-content/uploads/2025/08/tho.png"
+  },
+  {
+    "ho": "Đoàn Thị",
+    "ten": "Sâm",
+    "viTri": "BSCKI",
+    "chuyenKhoa": "Sản Phụ khoa",
+    "maChuyenKhoa": 3,
+    "anh": "https://binhdanhospital.vn/wp-content/uploads/2024/09/bs-sam.png"
+  },
+  {
+    "ho": "Hồ Thị Ngọc",
+    "ten": "Hà",
+    "viTri": "BSCKI",
+    "chuyenKhoa": "Sản Phụ khoa – Hiếm muộn",
+    "maChuyenKhoa": 8,
+    "anh": "https://binhdanhospital.vn/wp-content/uploads/2025/08/ho-thi-ngoc-ha-1.png"
+  },
+  {
+    "ho": "Trần Thị Minh",
+    "ten": "Thu",
+    "viTri": "BS",
+    "chuyenKhoa": "Nhi khoa",
+    "maChuyenKhoa": 4,
+    "anh": "https://binhdanhospital.vn/wp-content/uploads/2025/08/tran-thi-minh-thu.png"
+  },
+  {
+    "ho": "Lê Thị Kim",
+    "ten": "Dung",
+    "viTri": "ThS.BS",
+    "chuyenKhoa": "Nhi khoa",
+    "maChuyenKhoa": 4,
+    "anh": "https://binhdanhospital.vn/wp-content/uploads/2025/08/le-thi-kim-dung.png"
+  },
+  {
+    "ho": "Phạm Trung",
+    "ten": "Kiên",
+    "viTri": "BSCKI",
+    "chuyenKhoa": "Sản Phụ khoa – Nam khoa – Hỗ trợ sinh sản",
+    "maChuyenKhoa": 8,
+    "anh": "https://binhdanhospital.vn/wp-content/uploads/2025/08/pham-trung-kien.png"
+  },
+  {
+    "ho": "Vĩnh",
+    "ten": "Ngôn",
+    "viTri": "BSCKI",
+    "chuyenKhoa": "Ngoại khoa – Điều trị tuyến giáp",
+    "maChuyenKhoa": 12,
+    "anh": "https://binhdanhospital.vn/wp-content/uploads/2024/09/bs-ngon.png"
+  },
+  {
+    "ho": "Bạch Ngọc Hoàng",
+    "ten": "Yến",
+    "viTri": "BS",
+    "chuyenKhoa": "Chẩn đoán hình ảnh – Siêu âm",
+    "maChuyenKhoa": 9,
+    "anh": "https://binhdanhospital.vn/wp-content/uploads/2024/09/bs-bach-ngoc-hoang-yen.png"
+  },
+  {
+    "ho": "Lê Trọng",
+    "ten": "Long",
+    "viTri": "BSCKI",
+    "chuyenKhoa": "Nội chung – Hồi sức Cấp cứu",
+    "maChuyenKhoa": 6,
+    "anh": "https://binhdanhospital.vn/wp-content/uploads/2024/09/Thiet-ke-chua-co-ten-5.png"
+  },
+  {
+    "ho": "Lê Thanh",
+    "ten": "Phong",
+    "viTri": "BSCKI",
+    "chuyenKhoa": "Ngoại khoa",
+    "maChuyenKhoa": 2,
+    "anh": "https://binhdanhospital.vn/wp-content/uploads/2024/09/Thiet-ke-chua-co-ten-6.png"
+  },
+  {
+    "ho": "Bùi Thị",
+    "ten": "Cúc",
+    "viTri": "BSCKI",
+    "chuyenKhoa": "Huyết học – Truyền máu",
+    "maChuyenKhoa": 10,
+    "anh": "https://binhdanhospital.vn/wp-content/uploads/2024/09/bs-cuc.png"
+  },
+  {
+    "ho": "Nguyễn Thanh",
+    "ten": "Phong",
+    "viTri": "BSCKI",
+    "chuyenKhoa": "Gây mê – Hồi sức",
+    "maChuyenKhoa": 11,
+    "anh": "https://binhdanhospital.vn/wp-content/uploads/2024/09/bac-si-Nguyen-Thanh-Phong.png"
+  }
+]
