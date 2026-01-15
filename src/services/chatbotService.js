@@ -79,13 +79,17 @@ let handleChatBotService = (data) => {
                 return `ID: ${doc.id} - Bác sĩ: ${doc.ho} ${doc.ten} - Chuyên khoa ID: ${mapping ? mapping.maChuyenKhoa : "Chưa rõ"}`;
             }).join("\n");
 
-            let today = new Date();
-            let futureDate = new Date(today);
-            futureDate.setDate(today.getDate() + 7);
+            let now = new Date();
+            let vnNow = new Date(now.getTime() + (7 * 60 * 60 * 1000));
+            let currentHour = vnNow.getUTCHours();
+
+            let todayStart = new Date(now.setHours(0, 0, 0, 0));
+            let futureDate = new Date();
+            futureDate.setDate(todayStart.getDate() + 7);
 
             let schedules = await db.LichTrinh.findAll({
                 where: {
-                    ngayHen: { [Op.between]: [today.setHours(0, 0, 0, 0), futureDate.setHours(23, 59, 59, 999)] },
+                    ngayHen: { [Op.between]: [todayStart.getTime(), futureDate.setHours(23, 59, 59, 999)] },
                     soLuongToiDa: { [Op.gt]: db.Sequelize.col('soLuongHienTai') }
                 },
                 include: [
@@ -94,33 +98,43 @@ let handleChatBotService = (data) => {
                 ],
                 raw: true, nest: true
             });
-
             let scheduleString = "HIỆN KHÔNG CÓ LỊCH TRONG 7 NGÀY TỚI.";
 
             if (schedules && schedules.length > 0) {
                 schedules.sort((a, b) => new Date(a.ngayHen) - new Date(b.ngayHen));
 
-                scheduleString = schedules.map(s => {
-                    let timeInDB = new Date(s.ngayHen).getTime();
-                    let vnTime = new Date(timeInDB + (7 * 60 * 60 * 1000));
+                let filteredSchedules = schedules.filter(s => {
+                    let scheduleDate = new Date(s.ngayHen);
+                    if (scheduleDate.getTime() > todayStart.getTime()) return true;
 
-                    let vnDay = vnTime.getUTCDate();
-                    let vnMonth = vnTime.getUTCMonth() + 1;
-                    let vnYear = vnTime.getUTCFullYear();
+                    if (s.thoiGianData && s.thoiGianData.giaTriVi) {
+                        let startTime = parseInt(s.thoiGianData.giaTriVi.split(':')[0]);
+                        return startTime > currentHour;
+                    }
+                    return false;
+                });
 
-                    let dateStr = `${vnDay < 10 ? '0' + vnDay : vnDay}/${vnMonth < 10 ? '0' + vnMonth : vnMonth}/${vnYear}`;
+                if (filteredSchedules.length > 0) {
+                    scheduleString = filteredSchedules.map(s => {
+                        let timeInDB = new Date(s.ngayHen).getTime();
+                        let vnTime = new Date(timeInDB + (7 * 60 * 60 * 1000));
 
-                    let doctorName = "Bác sĩ";
-                    if (s.bacSiData) doctorName = `${s.bacSiData.ho} ${s.bacSiData.ten}`;
+                        let vnDay = vnTime.getUTCDate();
+                        let vnMonth = vnTime.getUTCMonth() + 1;
+                        let vnYear = vnTime.getUTCFullYear();
 
-                    let timeRange = "Giờ hành chính";
-                    if (s.thoiGianData) timeRange = s.thoiGianData.giaTriVi;
+                        let dateStr = `${vnDay < 10 ? '0' + vnDay : vnDay}/${vnMonth < 10 ? '0' + vnMonth : vnMonth}/${vnYear}`;
 
-                    return `- [CÓ LỊCH] Ngày ${dateStr}: ${doctorName} (ID: ${s.maBacSi}) rảnh lúc [${timeRange}]`;
-                }).join("\n");
+                        let doctorName = "Bác sĩ";
+                        if (s.bacSiData) doctorName = `${s.bacSiData.ho} ${s.bacSiData.ten}`;
+
+                        let timeRange = "Giờ hành chính";
+                        if (s.thoiGianData) timeRange = s.thoiGianData.giaTriVi;
+
+                        return `- [CÓ LỊCH] Ngày ${dateStr}: ${doctorName} (ID: ${s.maBacSi}) rảnh lúc [${timeRange}]`;
+                    }).join("\n");
+                }
             }
-
-            console.log(">>> FINAL SCHEDULE STRING:\n", scheduleString);
 
             const systemInstruction = getDetailedMedicalPrompt(specialtyString, doctorString, scheduleString);
 
