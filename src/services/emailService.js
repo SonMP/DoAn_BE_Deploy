@@ -4,16 +4,17 @@ require('dotenv').config();
 let createTransporter = () => {
     return nodemailer.createTransport({
         host: "smtp.gmail.com",
-        port: 465,
-        secure: true,
+        port: 587, 
+        secure: false, 
         auth: {
             user: process.env.EMAIL_APP,
             pass: process.env.EMAIL_APP_PASSWORD,
         },
-        connectionTimeout: 5000,
-        greetingTimeout: 5000,
-        socketTimeout: 5000,
+        connectionTimeout: 10000, 
+        greetingTimeout: 10000,
+        socketTimeout: 10000,
         tls: {
+            ciphers: 'SSLv3',
             rejectUnauthorized: false
         }
     });
