@@ -125,15 +125,22 @@ let handleChatBotService = (data) => {
             console.log("[DEBUG] Kết quả DB:", JSON.stringify(schedules, null, 2));
 
             let scheduleString = "HIỆN KHÔNG CÓ LỊCH TRONG 7 NGÀY TỚI.";
-
             if (schedules && schedules.length > 0) {
                 scheduleString = schedules.map(s => {
                     let dateStr = new Date(s.ngayHen).toLocaleDateString('vi-VN', {
-                        timeZone: 'Asia/Ho_Chi_Minh'
+                        timeZone: 'Asia/Ho_Chi_Minh',
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric'
                     });
 
-                    let doctorName = s.bacSiData ? `${s.bacSiData.ho} ${s.bacSiData.ten}` : "Bác sĩ";
-                    let timeRange = s.thoiGianData ? s.thoiGianData.giaTriVi : "Giờ hành chính";
+                    let doctorName = "Bác sĩ";
+                    if (s.bacSiData) doctorName = `${s.bacSiData.ho} ${s.bacSiData.ten}`;
+                    else if (s.doctorData) doctorName = `${s.doctorData.lastName} ${s.doctorData.firstName}`;
+
+                    let timeRange = "Giờ hành chính";
+                    if (s.thoiGianData) timeRange = s.thoiGianData.giaTriVi;
+                    else if (s.timeTypeData) timeRange = s.timeTypeData.valueVi;
 
                     return `- Ngày ${dateStr}: ${doctorName} (ID: ${s.maBacSi}) rảnh lúc [${timeRange}]`;
                 }).join("\n");
