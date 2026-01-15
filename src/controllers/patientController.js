@@ -1,4 +1,4 @@
-import patientService from '../services/patientService';
+import patientService from '../services/patientService.js';
 
 let postBookAppointment = async (req, res) => {
     try {

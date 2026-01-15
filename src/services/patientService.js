@@ -1,6 +1,6 @@
 import db from "../models/index.js";
 require('dotenv').config();
-import emailService from './emailService';
+import emailService from './emailService.js';
 import { v4 as uuidv4 } from 'uuid';
 
 let postBookAppointment = (data) => {

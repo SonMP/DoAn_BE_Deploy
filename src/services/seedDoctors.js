@@ -2,7 +2,7 @@ import db from "../models/index.js";
 import axios from "axios";
 import bcrypt from "bcryptjs";
 import sharp from "sharp";
-import doctorsData from "../utils/bacsi.json.js";
+import doctorsData from "../utils/bacsi.json";
 
 const salt = bcrypt.genSaltSync(10);
 
