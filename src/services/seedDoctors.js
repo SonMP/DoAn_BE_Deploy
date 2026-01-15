@@ -1,4 +1,4 @@
-import db Ô thay thế(Replace): from "../models/index.js";
+import db from "../models/index.js";
 import axios from "axios";
 import bcrypt from "bcryptjs";
 import sharp from "sharp";
