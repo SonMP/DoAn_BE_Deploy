@@ -14,28 +14,52 @@ if (!global.fetch) {
 
 const callGeminiDirectly = async (finalInput) => {
     const apiKey = process.env.GEMINI_API_KEY;
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`;
 
-    const payload = {
-        contents: [{ parts: [{ text: finalInput }] }],
-        generationConfig: {
-            responseMimeType: "application/json"
+    const models = [
+        "gemini-2.5-flash",
+        "gemini-2.5-flash-lite",
+        "gemini-2.0-flash",
+        "gemini-1.5-flash"
+    ];
+
+    let lastError = null;
+
+    for (const model of models) {
+        try {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: finalInput }] }],
+                    generationConfig: {
+                        responseMimeType: "application/json",
+                        temperature: 0.1
+                    }
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.status === 429) {
+                console.warn(`Model ${model} hết quota, đang thử model tiếp theo...`);
+                continue;
+            }
+
+            if (!response.ok) {
+                throw new Error(data.error?.message || "Lỗi không xác định");
+            }
+
+            return data.candidates[0].content.parts[0].text;
+
+        } catch (error) {
+            lastError = error;
+            console.error(`Lỗi với model ${model}:`, error.message);
         }
-    };
-
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-    });
-
-    if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Google API Error: ${response.status} - ${errorText}`);
     }
 
-    const data = await response.json();
-    return data.candidates[0].content.parts[0].text;
+    throw new Error(`Tất cả các Model đều không khả dụng hoặc hết Quota. Lỗi cuối cùng: ${lastError?.message}`);
 };
 
 

@@ -379,8 +379,8 @@ let handleForgotPassword = (email) => {
 
                 let resetToken = jwt.sign({ email: email }, process.env.JWT_SECRET || 'secret', { expiresIn: '15m' });
 
-                let link = `http://localhost:3000/reset-password?token=${resetToken}`;
-
+                let baseUrl = process.env.URL_REACT || 'http://localhost:3000';
+                let link = `${baseUrl}/reset-password?token=${resetToken}`;
                 await emailService.sendForgotPasswordEmail({
                     receiverEmail: email,
                     redirectLink: link

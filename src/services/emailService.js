@@ -1,7 +1,6 @@
 import nodemailer from "nodemailer";
 require('dotenv').config();
 
-
 let createTransporter = () => {
     return nodemailer.createTransport({
         port: 465,
