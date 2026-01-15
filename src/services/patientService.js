@@ -72,7 +72,7 @@ let postBookAppointment = (data) => {
                             time: data.timeString,
                             doctorName: data.doctorName,
                             language: data.language,
-                            redirectLink: `${process.env.URL_REACT}/verify-booking?token=${token}&doctorId=${data.doctorId}`
+                            redirectLink: `${process.env.URL_REACT || 'http://localhost:3000'}/verify-booking?token=${token}&doctorId=${data.doctorId}`
                         });
                         resolve({
                             errCode: 0,
@@ -247,7 +247,7 @@ let getBookingByEmail = (email) => {
 }
 
 let buildUrlEmail = (doctorId, token) => {
-    let result = `${process.env.URL_REACT}/verify-booking?token=${token}&doctorId=${doctorId}&isCancel=true`;
+    let result = `${process.env.URL_REACT || 'http://localhost:3000'}/verify-booking?token=${token}&doctorId=${doctorId}&isCancel=true`;
     return result;
 }
 
