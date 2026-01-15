@@ -1,8 +1,8 @@
-import db from "../models/index";
+import db Ô thay thế(Replace): from "../models/index.js";
 import axios from "axios";
 import bcrypt from "bcryptjs";
 import sharp from "sharp";
-import doctorsData from "../utils/bacsi.json";
+import doctorsData from "../utils/bacsi.json.js";
 
 const salt = bcrypt.genSaltSync(10);
 

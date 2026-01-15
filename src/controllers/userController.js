@@ -1,5 +1,5 @@
-import userService from "../services/userService";
-import seedDoctors from "../services/seedDoctors";
+import userService from "../services/userService.js";
+import seedDoctors from "../services/seedDoctors.js";
 
 let handlePatientSignUp = async (req, res) => {
     try {

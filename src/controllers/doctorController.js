@@ -1,4 +1,4 @@
-import doctorService from "../services/doctorService";
+import doctorService from "../services/doctorService.js";
 
 let postInforDoctor = async (req, res) => {
     try {

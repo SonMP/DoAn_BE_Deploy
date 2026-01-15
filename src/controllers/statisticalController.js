@@ -1,4 +1,4 @@
-import statisticalService from "../services/statisticalService";
+import statisticalService from "../services/statisticalService.js";
 
 let getAdminDashboardStats = async (req, res) => {
     try {

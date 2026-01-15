@@ -1,6 +1,6 @@
 import { json } from "body-parser";
-import db from "../models/index";
-import CRUDService from "../services/CRUDService";
+import db Ô thay thế(Replace): from "../models/index.js";
+import CRUDService from "../services/CRUDService.js";
 
 let getHomePage = async (req, res) => {
     let data = await db.NguoiDung.findAll();

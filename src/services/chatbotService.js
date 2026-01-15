@@ -1,4 +1,4 @@
-import db from "../models/index";
+import db Ô thay thế(Replace): from "../models/index.js";
 const { getDetailedMedicalPrompt } = require("../utils/prompts");
 require('dotenv').config();
 

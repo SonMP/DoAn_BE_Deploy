@@ -1,4 +1,4 @@
-import db from "../models/index";
+import db Ô thay thế(Replace): from "../models/index.js";
 require('dotenv').config();
 import _ from 'lodash';
 import emailService from './emailService';

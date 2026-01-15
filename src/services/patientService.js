@@ -1,4 +1,4 @@
-import db from "../models/index";
+import db Ô thay thế(Replace): from "../models/index.js";
 require('dotenv').config();
 import emailService from './emailService';
 import { v4 as uuidv4 } from 'uuid';

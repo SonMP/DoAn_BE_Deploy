@@ -1,4 +1,4 @@
-import chatbotService from "../services/chatbotService";
+import chatbotService from "../services/chatbotService.js";
 
 let handleChatBot = async (req, res) => {
     try {
