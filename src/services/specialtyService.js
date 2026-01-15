@@ -21,12 +21,22 @@ let createSpecialty = (data) => {
     })
 }
 
-let getAllSpecialty = () => {
+let getAllSpecialty = (limitInput, pageInput) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let data = await db.ChuyenKhoa.findAll({
+            let options = {
                 attributes: ['id', 'ten', 'hinhAnh', 'moTa', 'noiDungHTML', 'noiDungMarkdown']
-            });
+            };
+
+            if (limitInput && pageInput) {
+                let limit = +limitInput;
+                let page = +pageInput;
+                let offset = (page - 1) * limit;
+                options.limit = limit;
+                options.offset = offset;
+            }
+
+            let data = await db.ChuyenKhoa.findAll(options);
 
             resolve({ errCode: 0, errMessage: 'OK', data })
         } catch (e) { reject(e); }

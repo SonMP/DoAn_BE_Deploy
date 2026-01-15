@@ -16,7 +16,8 @@ let postInforDoctor = async (req, res) => {
 
 let handleGetAllDoctors = async (req, res) => {
     try {
-        let doctors = await doctorService.getAllDoctors();
+        let { limit, page } = req.query;
+        let doctors = await doctorService.getAllDoctors(limit, page);
         return res.status(200).json(doctors);
     } catch (e) {
         console.log(e);

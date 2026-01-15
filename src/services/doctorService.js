@@ -74,10 +74,10 @@ let saveDetailDoctor = (inputData) => {
     })
 }
 
-let getAllDoctors = () => {
+let getAllDoctors = (limitInput, pageInput) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let doctors = await db.NguoiDung.findAll({
+            let options = {
                 where: { maVaiTro: 'R2' },
                 order: [['createdAt', 'DESC']],
                 attributes: {
@@ -105,7 +105,17 @@ let getAllDoctors = () => {
                 ],
                 raw: false,
                 nest: true
-            })
+            };
+
+            if (limitInput && pageInput) {
+                let limit = +limitInput;
+                let page = +pageInput;
+                let offset = (page - 1) * limit;
+                options.limit = limit;
+                options.offset = offset;
+            }
+
+            let doctors = await db.NguoiDung.findAll(options);
 
             resolve({
                 errCode: 0,
