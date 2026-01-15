@@ -1,7 +1,8 @@
 import db from "../models/index.js";
+import { Op } from 'sequelize';
 const { getDetailedMedicalPrompt } = require("../utils/prompts");
 require('dotenv').config();
-import { Op } from 'sequelize';
+
 
 const fetch = require('node-fetch');
 if (!global.fetch) {
@@ -91,31 +92,48 @@ let handleChatBotService = (data) => {
             }).join("\n");
 
             let today = new Date();
-            let threeDaysLater = new Date(today);
-            threeDaysLater.setDate(today.getDate() + 3);
+            let futureDate = new Date(today);
+            futureDate.setDate(today.getDate() + 7);
+
+            console.log(`[DEBUG] Tìm lịch từ ${today.toLocaleDateString()} đến ${futureDate.toLocaleDateString()}`);
 
             let schedules = await db.LichTrinh.findAll({
                 where: {
                     ngayHen: {
-                        [Op.between]: [today.setHours(0, 0, 0, 0), threeDaysLater.setHours(23, 59, 59, 999)]
+                        [Op.between]: [today.setHours(0, 0, 0, 0), futureDate.setHours(23, 59, 59, 999)]
                     },
                     soLuongToiDa: {
                         [Op.gt]: db.Sequelize.col('soLuongHienTai')
                     }
                 },
                 include: [
-                    { model: db.QuyDinh, as: 'thoiGianData', attributes: ['giaTriVi'] },
-                    { model: db.NguoiDung, as: 'bacSiData', attributes: ['ho', 'ten'] }
+                    {
+                        model: db.QuyDinh,
+                        as: 'thoiGianData',
+                        attributes: ['giaTriVi']
+                    },
+                    {
+                        model: db.NguoiDung,
+                        as: 'bacSiData',
+                        attributes: ['ho', 'ten']
+                    }
                 ],
                 raw: true,
                 nest: true
             });
 
-            let scheduleString = "HIỆN KHÔNG CÓ LỊCH KHÁM NÀO TRONG 3 NGÀY TỚI.";
+            console.log("[DEBUG] Kết quả DB:", JSON.stringify(schedules, null, 2));
+
+            let scheduleString = "HIỆN KHÔNG CÓ LỊCH TRONG 7 NGÀY TỚI.";
+
             if (schedules && schedules.length > 0) {
                 scheduleString = schedules.map(s => {
                     let dateStr = new Date(s.ngayHen).toLocaleDateString('vi-VN');
-                    return `- Ngày ${dateStr}: Bác sĩ ${s.bacSiData.ho} ${s.bacSiData.ten} có ca khám lúc [${s.thoiGianData.giaTriVi}]`;
+
+                    let doctorName = s.bacSiData ? `${s.bacSiData.ho} ${s.bacSiData.ten}` : "Bác sĩ";
+                    let timeRange = s.thoiGianData ? s.thoiGianData.giaTriVi : "Giờ hành chính";
+
+                    return `- Ngày ${dateStr}: ${doctorName} (ID: ${s.maBacSi}) rảnh lúc [${timeRange}]`;
                 }).join("\n");
             }
 
