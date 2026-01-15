@@ -194,6 +194,7 @@ let bulkCreateScheduleService = (data) => {
                         item.soLuongToiDa = MAX_NUMBER_SCHEDULE;
                         item.ngayHen = dateTimestamp;
                         item.maBacSi = data.maBacSi;
+                        item.soLuongHienTai = 0;
                         return item;
                     })
                 }
@@ -559,7 +560,8 @@ let bulkCreateScheduleForWeek = (data) => {
                                 maBacSi: data.maBacSi,
                                 ngayHen: timeStamp,
                                 khungThoiGian: time.khoa,
-                                soLuongToiDa: MAX_NUMBER_SCHEDULE
+                                soLuongToiDa: MAX_NUMBER_SCHEDULE,
+                                soLuongHienTai: 0
                             });
                         });
                     }

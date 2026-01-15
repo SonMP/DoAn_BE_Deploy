@@ -100,7 +100,7 @@ let handleChatBotService = (data) => {
                         [Op.between]: [today.setHours(0, 0, 0, 0), threeDaysLater.setHours(23, 59, 59, 999)]
                     },
                     soLuongToiDa: {
-                        [Op.gt]: db.Sequelize.literal("COALESCE(soLuongHienTai, 0)")
+                        [Op.gt]: db.Sequelize.col('soLuongHienTai')
                     }
                 },
                 include: [
@@ -162,7 +162,7 @@ let getChatHistoryByUserService = (userId) => {
     return new Promise(async (resolve, reject) => {
         try {
             if (!userId) {
-                resolve({ errCode: 1, message: "Missing userId" });
+                resolve({ errCode: 1, message: "Thiếu mã người dùng" });
                 return;
             }
 
