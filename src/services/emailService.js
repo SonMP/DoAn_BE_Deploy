@@ -3,18 +3,13 @@ require('dotenv').config();
 
 let createTransporter = () => {
     return nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 587,
-        secure: false,
+        service: "Gmail",
         auth: {
             user: process.env.EMAIL_APP,
             pass: process.env.EMAIL_APP_PASSWORD,
         },
-        logger: true,
-        debug: true,
-        tls: {
-            rejectUnauthorized: false
-        }
+        logger: true, // Log to console
+        debug: true, // Include debug info
     });
 }
 
