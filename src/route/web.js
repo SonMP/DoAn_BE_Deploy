@@ -7,7 +7,7 @@ import specialtyController from "../controllers/specialtyController.js";
 import chatbotController from "../controllers/chatbotController.js";
 import statisticalController from "../controllers/statisticalController.js";
 
-import verifyToken from "../middleware/authMiddleware";
+import verifyToken from "../middleware/authMiddleware.js";
 
 let router = express.Router();
 
