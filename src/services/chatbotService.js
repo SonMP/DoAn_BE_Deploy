@@ -99,7 +99,9 @@ let handleChatBotService = (data) => {
                     ngayHen: {
                         [Op.between]: [today.setHours(0, 0, 0, 0), threeDaysLater.setHours(23, 59, 59, 999)]
                     },
-                    soLuongToiDa: { [Op.gt]: db.Sequelize.col('soLuongToiDa') }
+                    soLuongToiDa: {
+                        [Op.gt]: db.Sequelize.literal("COALESCE(soLuongHienTai, 0)")
+                    }
                 },
                 include: [
                     { model: db.QuyDinh, as: 'thoiGianData', attributes: ['giaTriVi'] },
