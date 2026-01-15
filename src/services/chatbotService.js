@@ -126,23 +126,31 @@ let handleChatBotService = (data) => {
 
             let scheduleString = "HIỆN KHÔNG CÓ LỊCH TRONG 7 NGÀY TỚI.";
             if (schedules && schedules.length > 0) {
+                schedules.sort((a, b) => new Date(a.ngayHen) - new Date(b.ngayHen));
+
                 scheduleString = schedules.map(s => {
-                    let dateStr = new Date(s.ngayHen).toLocaleDateString('vi-VN', {
-                        timeZone: 'Asia/Ho_Chi_Minh',
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric'
-                    });
+                    let timeInDB = new Date(s.ngayHen).getTime();
+
+
+                    let dateObj = new Date(s.ngayHen);
+                    let day = dateObj.getUTCDate(); /
+                    let month = dateObj.getUTCMonth() + 1;
+                    let year = dateObj.getUTCFullYear();
+
+                    let vnTime = new Date(timeInDB + (7 * 60 * 60 * 1000));
+                    let vnDay = vnTime.getUTCDate();
+                    let vnMonth = vnTime.getUTCMonth() + 1;
+                    let vnYear = vnTime.getUTCFullYear();
+
+                    let dateStr = `${vnDay < 10 ? '0' + vnDay : vnDay}/${vnMonth < 10 ? '0' + vnMonth : vnMonth}/${vnYear}`;
 
                     let doctorName = "Bác sĩ";
                     if (s.bacSiData) doctorName = `${s.bacSiData.ho} ${s.bacSiData.ten}`;
-                    else if (s.doctorData) doctorName = `${s.doctorData.lastName} ${s.doctorData.firstName}`;
 
                     let timeRange = "Giờ hành chính";
                     if (s.thoiGianData) timeRange = s.thoiGianData.giaTriVi;
-                    else if (s.timeTypeData) timeRange = s.timeTypeData.valueVi;
 
-                    return `- Ngày ${dateStr}: ${doctorName} (ID: ${s.maBacSi}) rảnh lúc [${timeRange}]`;
+                    return `- [CÓ LỊCH] Ngày ${dateStr}: ${doctorName} (ID: ${s.maBacSi}) rảnh lúc [${timeRange}]`;
                 }).join("\n");
             }
 
