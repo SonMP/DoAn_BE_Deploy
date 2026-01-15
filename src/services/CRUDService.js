@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import db from "../models";
+import db from "../models/index.js"
 
 const salt = bcrypt.genSaltSync(10);
 
@@ -38,10 +38,10 @@ let layNguoiDung = () => {
     })
 }
 let layNguoiDungTheoMa = (maNguoiDung) => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
             if (maNguoiDung) {
-                let nguoiDung = db.NguoiDung.findOne({
+                let nguoiDung = await db.NguoiDung.findOne({
                     where: { id: maNguoiDung },
                     raw: true
                 })
@@ -80,7 +80,7 @@ let capNhatNguoiDung = (duLieu) => {
                 nguoiDung.soDienThoai = duLieu.sodienthoai;
                 nguoiDung.gioiTinh = duLieu.gioitinh;
                 nguoiDung.maVaiTro = duLieu.vaitro;
-                nguoiDung.save();
+                await nguoiDung.save();
                 resolve("Cập nhật thành công");
             } else (
                 reject("Không tìm thấy người dùng!")
@@ -99,6 +99,7 @@ let xoaNguoiDung = (maNguoiDung) => {
             })
             if (nguoiDung) {
                 await nguoiDung.destroy();
+                resolve("Xóa thành công!");
             } else (
                 reject("Không tìm thấy người dùng!")
             )
@@ -107,7 +108,7 @@ let xoaNguoiDung = (maNguoiDung) => {
         }
     })
 }
-module.exports = {
+export default {
     taoNguoiDung: taoNguoiDung,
     layNguoiDung: layNguoiDung,
     layNguoiDungTheoMa: layNguoiDungTheoMa,
