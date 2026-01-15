@@ -46,9 +46,7 @@ let handleChatBotService = (data) => {
 
             if (userId) {
                 await db.LichSuChat.create({
-                    maBenhNhan: userId,
-                    noiDung: message,
-                    laBot: false
+                    maBenhNhan: userId, noiDung: message, laBot: false
                 });
             }
 
@@ -62,82 +60,50 @@ let handleChatBotService = (data) => {
                 historyContext = historyDb.reverse().map(h => {
                     let content = h.noiDung;
                     if (h.laBot) {
-                        try {
-                            let json = JSON.parse(h.noiDung);
-                            content = json.analysis;
-                        } catch (e) { }
+                        try { content = JSON.parse(h.noiDung).analysis; } catch (e) { }
                     }
                     return `${h.laBot ? 'AI' : 'USER'}: "${content}"`;
                 }).join("\n");
             } else if (history && Array.isArray(history)) {
-                historyContext = history.map(h => {
-                    return `${h.isBot ? 'AI' : 'USER'}: "${h.text}"`;
-                }).join("\n");
+                historyContext = history.map(h => `${h.isBot ? 'AI' : 'USER'}: "${h.text}"`).join("\n");
             }
 
             let specialties = await db.ChuyenKhoa.findAll({ attributes: ['id', 'ten'] });
             let specialtyString = specialties.map(item => `ID: ${item.id} - ${item.ten}`).join("\n");
 
-            let doctors = await db.NguoiDung.findAll({
-                where: { maVaiTro: 'R2' },
-                attributes: ['id', 'ten', 'ho']
-            });
-
+            let doctors = await db.NguoiDung.findAll({ where: { maVaiTro: 'R2' }, attributes: ['id', 'ten', 'ho'] });
             let doctorSpecialtyMap = await db.BacSi_ChuyenKhoa.findAll({ attributes: ['maBacSi', 'maChuyenKhoa'] });
 
             let doctorString = doctors.map(doc => {
                 let mapping = doctorSpecialtyMap.find(m => m.maBacSi === doc.id);
-                let chuyenKhoaId = mapping ? mapping.maChuyenKhoa : "Chưa rõ";
-                return `ID: ${doc.id} - Bác sĩ: ${doc.ho} ${doc.ten} - Thuộc Chuyên khoa ID: ${chuyenKhoaId}`;
+                return `ID: ${doc.id} - Bác sĩ: ${doc.ho} ${doc.ten} - Chuyên khoa ID: ${mapping ? mapping.maChuyenKhoa : "Chưa rõ"}`;
             }).join("\n");
 
             let today = new Date();
             let futureDate = new Date(today);
             futureDate.setDate(today.getDate() + 7);
 
-            console.log(`[DEBUG] Tìm lịch từ ${today.toLocaleDateString()} đến ${futureDate.toLocaleDateString()}`);
-
             let schedules = await db.LichTrinh.findAll({
                 where: {
-                    ngayHen: {
-                        [Op.between]: [today.setHours(0, 0, 0, 0), futureDate.setHours(23, 59, 59, 999)]
-                    },
-                    soLuongToiDa: {
-                        [Op.gt]: db.Sequelize.col('soLuongHienTai')
-                    }
+                    ngayHen: { [Op.between]: [today.setHours(0, 0, 0, 0), futureDate.setHours(23, 59, 59, 999)] },
+                    soLuongToiDa: { [Op.gt]: db.Sequelize.col('soLuongHienTai') }
                 },
                 include: [
-                    {
-                        model: db.QuyDinh,
-                        as: 'thoiGianData',
-                        attributes: ['giaTriVi']
-                    },
-                    {
-                        model: db.NguoiDung,
-                        as: 'bacSiData',
-                        attributes: ['ho', 'ten']
-                    }
+                    { model: db.QuyDinh, as: 'thoiGianData', attributes: ['giaTriVi'] },
+                    { model: db.NguoiDung, as: 'bacSiData', attributes: ['ho', 'ten'] }
                 ],
-                raw: true,
-                nest: true
+                raw: true, nest: true
             });
 
-            console.log("[DEBUG] Kết quả DB:", JSON.stringify(schedules, null, 2));
-
             let scheduleString = "HIỆN KHÔNG CÓ LỊCH TRONG 7 NGÀY TỚI.";
+
             if (schedules && schedules.length > 0) {
                 schedules.sort((a, b) => new Date(a.ngayHen) - new Date(b.ngayHen));
 
                 scheduleString = schedules.map(s => {
                     let timeInDB = new Date(s.ngayHen).getTime();
-
-
-                    let dateObj = new Date(s.ngayHen);
-                    let day = dateObj.getUTCDate(); /
-                    let month = dateObj.getUTCMonth() + 1;
-                    let year = dateObj.getUTCFullYear();
-
                     let vnTime = new Date(timeInDB + (7 * 60 * 60 * 1000));
+
                     let vnDay = vnTime.getUTCDate();
                     let vnMonth = vnTime.getUTCMonth() + 1;
                     let vnYear = vnTime.getUTCFullYear();
@@ -154,7 +120,10 @@ let handleChatBotService = (data) => {
                 }).join("\n");
             }
 
-            const systemInstruction = getDetailedMedicalPrompt(specialtyString, doctorString);
+            console.log(">>> FINAL SCHEDULE STRING:\n", scheduleString);
+
+            const systemInstruction = getDetailedMedicalPrompt(specialtyString, doctorString, scheduleString);
+
             const finalInput = `${systemInstruction}\n\n--- HISTORY ---\n${historyContext}\n\n--- INPUT ---\n"${message}"`;
 
             let rawText = await callGeminiDirectly(finalInput);
@@ -165,27 +134,16 @@ let handleChatBotService = (data) => {
                 aiResponse = JSON.parse(cleanJson);
             } catch (e) {
                 console.log("Lỗi parse JSON AI:", e);
-                aiResponse = {
-                    analysis: rawText,
-                    advice: "",
-                    specialtyId: null,
-                    doctorName: "",
-                    doctorId: null
-                };
+                aiResponse = { analysis: rawText, intent: "chat" };
             }
 
             if (userId) {
                 await db.LichSuChat.create({
-                    maBenhNhan: userId,
-                    noiDung: JSON.stringify(aiResponse),
-                    laBot: true
+                    maBenhNhan: userId, noiDung: JSON.stringify(aiResponse), laBot: true
                 });
             }
 
-            resolve({
-                errCode: 0,
-                ...aiResponse
-            });
+            resolve({ errCode: 0, ...aiResponse });
 
         } catch (e) {
             reject(e);
