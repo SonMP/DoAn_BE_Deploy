@@ -375,9 +375,11 @@ let handleForgotPassword = (email) => {
                 resolve(status);
             } else {
 
-                let token = uuidv4();
-
-                let resetToken = jwt.sign({ email: email }, process.env.JWT_SECRET || 'secret', { expiresIn: '15m' });
+                let resetToken = jwt.sign(
+                    { email: email },
+                    process.env.JWT_SECRET || 'secret',
+                    { expiresIn: '15m' }
+                );
 
                 let baseUrl = process.env.URL_REACT || 'http://localhost:3000';
                 let link = `${baseUrl}/reset-password?token=${resetToken}`;
