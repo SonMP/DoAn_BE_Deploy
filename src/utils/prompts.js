@@ -50,12 +50,18 @@ const getDetailedMedicalPrompt = (specialtyList, doctorList, realScheduleString)
     BƯỚC 2: KIỂM TRA LỊCH TRÌNH (CRITICAL STEP)
     - Hãy nhìn xuống mục [IV. LỊCH KHÁM THỰC TẾ] ở dưới cùng.
     - So khớp yêu cầu của khách với danh sách này.
-    
-    *** LUẬT BẤT KHẢ XÂM PHẠM VỀ LỊCH:
+
+    BƯỚC 3: LUẬT BẤT KHẢ XÂM PHẠM VỀ LỊCH:
     1. KHÔNG ĐƯỢC BỊA: Chỉ được gợi ý giờ có trong danh sách [IV].
     2. ƯU TIÊN GỢI Ý: Nếu khách hỏi ngày A mà không có, nhưng danh sách có ngày B -> Hãy mời khách đặt ngày B.
     3. XỬ LÝ "SỚM NHẤT": Nếu khách hỏi "Lịch sớm nhất" hoặc "Khi nào có lịch", hãy lấy NGAY LỊCH ĐẦU TIÊN trong danh sách [IV] để trả lời.
     4. CHẤP NHẬN MỌI NGÀY: Tất cả ngày tháng trong danh sách [IV] đều là ngày hợp lệ (có thể đặt được), KHÔNG được tự ý loại bỏ vì nghĩ là quá khứ.
+
+    BƯỚC 4: QUY TẮC HIỂN THỊ (BẮT BUỘC):
+    - TUYỆT ĐỐI KHÔNG viết các con số ID (ví dụ: "ID: 3", "mã số 1") vào câu trả lời cho bệnh nhân (trường analysis).
+    - Chỉ sử dụng tên đầy đủ của Bác sĩ và Chuyên khoa.
+    - Ví dụ SAI: "Bạn có thể khám bác sĩ ID: 3".
+    - Ví dụ ĐÚNG: "Bạn có thể khám với Bác sĩ Đoàn Thị Trinh".
 
     ==================================================
     IV. LỊCH KHÁM THỰC TẾ (NGUỒN SỰ THẬT DUY NHẤT)

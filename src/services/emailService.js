@@ -11,6 +11,9 @@ let createTransporter = () => {
             user: process.env.EMAIL_APP,
             pass: process.env.EMAIL_APP_PASSWORD,
         },
+        tls: {
+            rejectUnauthorized: false
+        }
     });
 }
 
