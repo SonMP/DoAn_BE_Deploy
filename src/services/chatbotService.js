@@ -128,7 +128,9 @@ let handleChatBotService = (data) => {
 
             if (schedules && schedules.length > 0) {
                 scheduleString = schedules.map(s => {
-                    let dateStr = new Date(s.ngayHen).toLocaleDateString('vi-VN');
+                    let dateStr = new Date(s.ngayHen).toLocaleDateString('vi-VN', {
+                        timeZone: 'Asia/Ho_Chi_Minh'
+                    });
 
                     let doctorName = s.bacSiData ? `${s.bacSiData.ho} ${s.bacSiData.ten}` : "Bác sĩ";
                     let timeRange = s.thoiGianData ? s.thoiGianData.giaTriVi : "Giờ hành chính";
