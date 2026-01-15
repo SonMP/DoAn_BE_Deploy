@@ -95,6 +95,26 @@ let handleSeedData = async (req, res) => {
 
 
 
+let handleForgotPassword = async (req, res) => {
+    try {
+        let message = await userService.handleForgotPassword(req.body.email);
+        return res.status(200).json(message);
+    } catch (e) {
+        console.log(e);
+        return res.status(200).json({ errCode: -1, message: 'Lỗi server!' });
+    }
+}
+
+let handleResetPassword = async (req, res) => {
+    try {
+        let message = await userService.handleResetPassword(req.body);
+        return res.status(200).json(message);
+    } catch (e) {
+        console.log(e);
+        return res.status(200).json({ errCode: -1, message: 'Lỗi server!' });
+    }
+}
+
 module.exports = {
     handlePatientSignUp: handlePatientSignUp,
     handleLogin: handleLogin,
@@ -105,4 +125,6 @@ module.exports = {
     getQuyDinh: getQuyDinh,
     getDoctorHome: getDoctorHome,
     handleSeedData: handleSeedData,
+    handleForgotPassword: handleForgotPassword,
+    handleResetPassword: handleResetPassword
 }

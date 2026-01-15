@@ -8,7 +8,7 @@ let handleChatBot = async (req, res) => {
         console.log("Lỗi Controller handleChatBot:", e);
         return res.status(200).json({
             errCode: -1,
-            message: 'Lỗi từ server!'
+            message: 'Lỗi từ server: ' + e.message
         });
     }
 }
@@ -37,4 +37,4 @@ module.exports = {
     handleChatBot,
     getChatHistoryByUser,
     getPatientChatSummary
-}
+};

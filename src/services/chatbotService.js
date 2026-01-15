@@ -89,6 +89,33 @@ let handleChatBotService = (data) => {
                 return `ID: ${doc.id} - Bác sĩ: ${doc.ho} ${doc.ten} - Thuộc Chuyên khoa ID: ${chuyenKhoaId}`;
             }).join("\n");
 
+            let today = new Date();
+            let threeDaysLater = new Date(today);
+            threeDaysLater.setDate(today.getDate() + 3);
+
+            let schedules = await db.LichTrinh.findAll({
+                where: {
+                    ngayHen: {
+                        [Op.between]: [today.setHours(0, 0, 0, 0), threeDaysLater.setHours(23, 59, 59, 999)]
+                    },
+                    soLuongToiDa: { [Op.gt]: db.Sequelize.col('soLuongDaDat') }
+                },
+                include: [
+                    { model: db.QuyDinh, as: 'thoiGianData', attributes: ['giaTriVi'] },
+                    { model: db.NguoiDung, as: 'bacSiData', attributes: ['ho', 'ten'] }
+                ],
+                raw: true,
+                nest: true
+            });
+
+            let scheduleString = "HIỆN KHÔNG CÓ LỊCH KHÁM NÀO TRONG 3 NGÀY TỚI.";
+            if (schedules && schedules.length > 0) {
+                scheduleString = schedules.map(s => {
+                    let dateStr = new Date(s.ngayHen).toLocaleDateString('vi-VN');
+                    return `- Ngày ${dateStr}: Bác sĩ ${s.bacSiData.ho} ${s.bacSiData.ten} có ca khám lúc [${s.thoiGianData.giaTriVi}]`;
+                }).join("\n");
+            }
+
             const systemInstruction = getDetailedMedicalPrompt(specialtyString, doctorString);
             const finalInput = `${systemInstruction}\n\n--- HISTORY ---\n${historyContext}\n\n--- INPUT ---\n"${message}"`;
 
@@ -186,7 +213,7 @@ let getPatientChatSummaryService = (patientId) => {
     return new Promise(async (resolve, reject) => {
         try {
             if (!patientId) {
-                resolve({ errCode: 1, message: "Missing patientId" });
+                resolve({ errCode: 1, message: "Thiếu mã bệnh nhân" });
                 return;
             }
 

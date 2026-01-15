@@ -182,8 +182,50 @@ let sendCancelEmail = async (dataSend) => {
     });
 }
 
+const sendForgotPasswordEmail = async (dataSend) => {
+    let transporter = createTransporter();
+
+    let htmlContent = `
+    <div style="font-family: Arial, sans-serif; background-color: #f4f7f6; padding: 40px 0;">
+        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+            <div style="background-color: #ffc107; padding: 20px; text-align: center;">
+                <h2 style="color: #333; margin: 0; text-transform: uppercase;">YÊU CẦU ĐẶT LẠI MẬT KHẨU</h2>
+            </div>
+            
+            <div style="padding: 30px;">
+                <p>Xin chào,</p>
+                <p>Bạn (hoặc ai đó) đã yêu cầu đặt lại mật khẩu cho tài khoản: <b>${dataSend.receiverEmail}</b></p>
+                <p>Để đặt lại mật khẩu của bạn, vui lòng nhấp vào nút bên dưới:</p>
+                
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="${dataSend.redirectLink}" target="_blank" 
+                       style="background-color: #007bff; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 16px; display: inline-block;">
+                        Đặt lại mật khẩu
+                    </a>
+                </div>
+                
+                <p>Link này sẽ hết hạn sau thời gian ngắn để đảm bảo an toàn.</p>
+                <p>Nếu bạn không yêu cầu điều này, vui lòng bỏ qua email này.</p>
+            </div>
+
+            <div style="background-color: #f1f1f1; padding: 15px; text-align: center; font-size: 12px; color: #888;">
+                <p>&copy; 2025 Binh Dan Hospital</p>
+            </div>
+        </div>
+    </div>
+    `;
+
+    await transporter.sendMail({
+        from: '"Bệnh viện Bình Dân Đà Nẵng" <foo@example.com>',
+        to: dataSend.receiverEmail,
+        subject: "🔒 ĐẶT LẠI MẬT KHẨU - BỆNH VIỆN BÌNH DÂN",
+        html: htmlContent,
+    });
+}
+
 module.exports = {
     sendSimpleEmail: sendSimpleEmail,
     sendAttachment: sendAttachment,
-    sendCancelEmail: sendCancelEmail
+    sendCancelEmail: sendCancelEmail,
+    sendForgotPasswordEmail: sendForgotPasswordEmail
 }

@@ -2,6 +2,8 @@ import db from "../models/index.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { where } from "sequelize";
+import emailService from './emailService.js';
+import { v4 as uuidv4 } from 'uuid';
 
 const salt = bcrypt.genSaltSync(10);
 
@@ -360,6 +362,99 @@ let getDoctorService = (limitInput) => {
 
 
 
+import emailService from './emailService.js';
+import { v4 as uuidv4 } from 'uuid';
+
+let handleForgotPassword = (email) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let status = {};
+            // Check if email exist
+            let user = await db.NguoiDung.findOne({
+                where: { email: email },
+                raw: false
+            });
+
+            if (!user) {
+                status.errCode = 1;
+                status.message = "Email không tồn tại trong hệ thống!";
+                resolve(status);
+            } else {
+                // Generate random token (for simplicity using uuid, in production should use JWT or save token in DB)
+                let token = uuidv4();
+
+                // For this demo, we can just send the ID and a Token (or just sign a JWT with short expiry)
+                // Let's use a simple approach: Send a link with email & token. 
+                // Note: Real world app should save this token to DB with expiry to verify later.
+                // Assuming we verify just by ID for now or trust the link (less secure but faster for this task).
+                // BETTER: Update user record with a resetToken
+
+                // Let's keep it simple: We just verify email matches. 
+                // For a proper flow: 
+                // 1. Generate token -> Save to DB (User model needs resetToken column) OR
+                // 2. Sign a JWT containing email + expiry. Frontend sends this JWT back.
+
+                // Implementation: Sign a JWT
+                let resetToken = jwt.sign({ email: email }, process.env.JWT_SECRET || 'secret', { expiresIn: '15m' });
+
+                let link = `http://localhost:3000/reset-password?token=${resetToken}`;
+
+                await emailService.sendForgotPasswordEmail({
+                    receiverEmail: email,
+                    redirectLink: link
+                });
+
+                status.errCode = 0;
+                status.message = "Đã gửi email khôi phục mật khẩu!";
+                resolve(status);
+            }
+
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+let handleResetPassword = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!data.token || !data.newPassword) {
+                resolve({ errCode: 1, message: 'Thiếu tham số!' });
+            } else {
+                // Verify token
+                let decoded = null;
+                try {
+                    decoded = jwt.verify(data.token, process.env.JWT_SECRET || 'secret');
+                } catch (err) {
+                    resolve({ errCode: 2, message: 'Token không hợp lệ hoặc đã hết hạn!' });
+                    return;
+                }
+
+                if (decoded && decoded.email) {
+                    let user = await db.NguoiDung.findOne({
+                        where: { email: decoded.email },
+                        raw: false
+                    });
+
+                    if (user) {
+                        let hashPasswordFromBcrypt = await hashPassword(data.newPassword);
+                        user.matKhau = hashPasswordFromBcrypt;
+                        await user.save();
+
+                        resolve({ errCode: 0, message: 'Đặt lại mật khẩu thành công!' });
+                    } else {
+                        resolve({ errCode: 1, message: 'Người dùng không tồn tại!' });
+                    }
+                } else {
+                    resolve({ errCode: 2, message: 'Token không hợp lệ!' });
+                }
+            }
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
 module.exports = {
     handleLoginService: handleLoginService,
     createNewPatient: createNewPatient,
@@ -369,4 +464,6 @@ module.exports = {
     deleteUser: deleteUser,
     getQuyDinhService: getQuyDinhService,
     getDoctorService: getDoctorService,
+    handleForgotPassword: handleForgotPassword,
+    handleResetPassword: handleResetPassword
 }
