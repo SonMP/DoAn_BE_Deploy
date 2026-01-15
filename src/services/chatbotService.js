@@ -1,6 +1,7 @@
 import db from "../models/index.js";
 const { getDetailedMedicalPrompt } = require("../utils/prompts");
 require('dotenv').config();
+import { Op } from 'sequelize';
 
 const fetch = require('node-fetch');
 if (!global.fetch) {
