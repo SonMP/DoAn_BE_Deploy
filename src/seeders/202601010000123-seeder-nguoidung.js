@@ -76,6 +76,6 @@ module.exports = {
     },
 
     down: async (queryInterface, Sequelize) => {
-        return queryInterface.bulkDelete('NguoiDungs', { maVaiTro: 'R2' }, {});
+        return queryInterface.bulkDelete('NguoiDung', { maVaiTro: 'R2' }, {});
     }
 };
