@@ -4,7 +4,7 @@ import _ from 'lodash';
 import emailService from './emailService.js';
 
 const { Op } = require("sequelize");
-const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE || 10;
+const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE || 5;
 
 let saveDetailDoctor = (inputData) => {
     return new Promise(async (resolve, reject) => {
@@ -292,21 +292,9 @@ let getScheduleByDateService = (doctorId, date) => {
                     nest: true
                 })
 
-                let bookingS2 = await db.DatLich.findAll({
-                    where: {
-                        maBacSi: doctorId,
-                        ngayHen: dateToSearch,
-                        maTrangThai: 'S2'
-                    },
-                    attributes: ['khungThoiGian'],
-                    raw: true
-                });
-
-                let listTimeDaDat = bookingS2.map(item => item.khungThoiGian);
-
                 if (data && data.length > 0) {
                     data = data.map(item => {
-                        if (listTimeDaDat.includes(item.khungThoiGian)) {
+                        if (item.soLuongHienTai >= item.soLuongToiDa) {
                             item.daBiDat = true;
                         } else {
                             item.daBiDat = false;
