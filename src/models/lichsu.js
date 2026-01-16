@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         maBenhNhan: DataTypes.INTEGER,
         maBacSi: DataTypes.INTEGER,
         moTa: DataTypes.TEXT,
-        taiLieu: DataTypes.TEXT
+        taiLieu: DataTypes.TEXT('long')
     }, {
         sequelize,
         modelName: 'LichSu',
