@@ -99,7 +99,6 @@ let sendAttachment = async (dataSend) => {
     sendSmtpEmail.sender = { "name": SENDER_NAME, "email": SENDER_EMAIL };
     sendSmtpEmail.to = [{ "email": dataSend.email, "name": dataSend.patientName }];
 
-    // Attachment
     sendSmtpEmail.attachment = [{
         name: `remedy-${dataSend.patientId}-${new Date().getTime()}.png`,
         content: dataSend.imgBase64.split("base64,")[1]
@@ -191,8 +190,8 @@ const sendForgotPasswordEmail = async (dataSend) => {
     sendSmtpEmail.htmlContent = `
     <div style="font-family: Arial, sans-serif; background-color: #f4f7f6; padding: 40px 0;">
         <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
-            <div style="background-color: #ffc107; padding: 20px; text-align: center;">
-                <h2 style="color: #333; margin: 0; text-transform: uppercase;">YÊU CẦU ĐẶT LẠI MẬT KHẨU</h2>
+            <div style="background-color: #007f5f; padding: 20px; text-align: center;">
+                <h2 style="color: white; margin: 0; text-transform: uppercase;">YÊU CẦU ĐẶT LẠI MẬT KHẨU</h2>
             </div>
             
             <div style="padding: 30px;">
@@ -202,7 +201,7 @@ const sendForgotPasswordEmail = async (dataSend) => {
                 
                 <div style="text-align: center; margin: 30px 0;">
                     <a href="${dataSend.redirectLink}" target="_blank" 
-                       style="background-color: #007bff; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 16px; display: inline-block;">
+                       style="background-color: #28a745; color: #ffffff; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 16px; display: inline-block;">
                         Đặt lại mật khẩu
                     </a>
                 </div>
