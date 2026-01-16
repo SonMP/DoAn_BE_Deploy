@@ -443,7 +443,8 @@ let getListPatientForDoctor = (doctorId, date) => {
                         maBacSi: doctorId,
                         ngayHen: {
                             [Op.between]: [startDay, endDay]
-                        }
+                        },
+                        maTrangThai: { [Op.in]: ['S2', 'S3'] }
                     },
                     include: [
                         {

@@ -1,28 +1,18 @@
-import nodemailer from "nodemailer";
+import Brevo from '@getbrevo/brevo';
 require('dotenv').config();
 
-let createTransporter = () => {
-    return nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 587,
-        secure: false,
-        auth: {
-            user: process.env.EMAIL_APP,
-            pass: process.env.EMAIL_APP_PASSWORD,
-        },
-        tls: {
-            rejectUnauthorized: false
-        },
-        family: 4,
-        logger: true,
-        debug: true,
-    });
-}
+const apiInstance = new Brevo.TransactionalEmailsApi();
+const apiKey = apiInstance.authentications['apiKey'];
+apiKey.apiKey = process.env.BREVO_API_KEY;
+
+const SENDER_EMAIL = process.env.SENDER_EMAIL || process.env.EMAIL_APP;
+const SENDER_NAME = process.env.SENDER_NAME || "Bệnh viện Bình Dân Đà Nẵng";
 
 let sendSimpleEmail = async (dataSend) => {
-    let transporter = createTransporter();
+    let sendSmtpEmail = new Brevo.SendSmtpEmail();
 
-    let htmlContent = `
+    sendSmtpEmail.subject = "🔔 XÁC NHẬN LỊCH ĐẶT KHÁM BỆNH - BỆNH VIỆN BÌNH DÂN";
+    sendSmtpEmail.htmlContent = `
     <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
         
         <div style="background-color: #007f5f; padding: 20px; text-align: center;">
@@ -64,19 +54,22 @@ let sendSimpleEmail = async (dataSend) => {
         </div>
     </div>
     `;
+    sendSmtpEmail.sender = { "name": SENDER_NAME, "email": SENDER_EMAIL };
+    sendSmtpEmail.to = [{ "email": dataSend.receiverEmail, "name": dataSend.patientName }];
 
-    await transporter.sendMail({
-        from: '"Bệnh viện Bình Dân Đà Nẵng" <foo@example.com>',
-        to: dataSend.receiverEmail,
-        subject: "🔔 XÁC NHẬN LỊCH ĐẶT KHÁM BỆNH - BỆNH VIỆN BÌNH DÂN",
-        html: htmlContent,
-    });
+    try {
+        await apiInstance.sendTransacEmail(sendSmtpEmail);
+        console.log('Email sent successfully');
+    } catch (error) {
+        console.error('Error sending email:', error);
+    }
 }
 
 let sendAttachment = async (dataSend) => {
-    let transporter = createTransporter();
+    let sendSmtpEmail = new Brevo.SendSmtpEmail();
 
-    let htmlContent = `
+    sendSmtpEmail.subject = "KẾT QUẢ KHÁM BỆNH & HÓA ĐƠN";
+    sendSmtpEmail.htmlContent = `
     <div style="background-color: #f4f7f6; font-family: Arial, sans-serif; padding: 20px;">
         <div style="max-width: 600px; margin: 0 auto; background-color: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
             <div style="background-color: #28a745; padding: 20px; text-align: center;">
@@ -103,26 +96,28 @@ let sendAttachment = async (dataSend) => {
         </div>
     </div>
     `;
+    sendSmtpEmail.sender = { "name": SENDER_NAME, "email": SENDER_EMAIL };
+    sendSmtpEmail.to = [{ "email": dataSend.email, "name": dataSend.patientName }];
 
-    await transporter.sendMail({
-        from: '"Bệnh viện Bình Dân Đà Nẵng" <foo@example.com>',
-        to: dataSend.email,
-        subject: "KẾT QUẢ KHÁM BỆNH & HÓA ĐƠN",
-        html: htmlContent,
-        attachments: [
-            {
-                filename: `remedy-${dataSend.patientId}-${new Date().getTime()}.png`,
-                content: dataSend.imgBase64.split("base64,")[1],
-                encoding: 'base64'
-            }
-        ]
-    });
+    // Attachment
+    sendSmtpEmail.attachment = [{
+        name: `remedy-${dataSend.patientId}-${new Date().getTime()}.png`,
+        content: dataSend.imgBase64.split("base64,")[1]
+    }];
+
+    try {
+        await apiInstance.sendTransacEmail(sendSmtpEmail);
+        console.log('Email with attachment sent successfully');
+    } catch (error) {
+        console.error('Error sending email with attachment:', error);
+    }
 }
 
 let sendCancelEmail = async (dataSend) => {
-    let transporter = createTransporter();
+    let sendSmtpEmail = new Brevo.SendSmtpEmail();
 
-    let htmlContent = `
+    sendSmtpEmail.subject = "⚠️ XÁC THỰC YÊU CẦU HỦY LỊCH HẸN";
+    sendSmtpEmail.htmlContent = `
     <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 40px 0;">
         <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
             
@@ -178,19 +173,22 @@ let sendCancelEmail = async (dataSend) => {
         </div>
     </div>
     `;
+    sendSmtpEmail.sender = { "name": SENDER_NAME, "email": SENDER_EMAIL };
+    sendSmtpEmail.to = [{ "email": dataSend.receiverEmail, "name": dataSend.patientName }];
 
-    await transporter.sendMail({
-        from: '"Bệnh viện Bình Dân Đà Nẵng" <foo@example.com>',
-        to: dataSend.receiverEmail,
-        subject: "⚠️ XÁC THỰC YÊU CẦU HỦY LỊCH HẸN",
-        html: htmlContent,
-    });
+    try {
+        await apiInstance.sendTransacEmail(sendSmtpEmail);
+        console.log('Cancel email sent successfully');
+    } catch (error) {
+        console.error('Error sending cancel email:', error);
+    }
 }
 
 const sendForgotPasswordEmail = async (dataSend) => {
-    let transporter = createTransporter();
+    let sendSmtpEmail = new Brevo.SendSmtpEmail();
 
-    let htmlContent = `
+    sendSmtpEmail.subject = "🔒 ĐẶT LẠI MẬT KHẨU - BỆNH VIỆN BÌNH DÂN";
+    sendSmtpEmail.htmlContent = `
     <div style="font-family: Arial, sans-serif; background-color: #f4f7f6; padding: 40px 0;">
         <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
             <div style="background-color: #ffc107; padding: 20px; text-align: center;">
@@ -219,13 +217,15 @@ const sendForgotPasswordEmail = async (dataSend) => {
         </div>
     </div>
     `;
+    sendSmtpEmail.sender = { "name": SENDER_NAME, "email": SENDER_EMAIL };
+    sendSmtpEmail.to = [{ "email": dataSend.receiverEmail }];
 
-    await transporter.sendMail({
-        from: '"Bệnh viện Bình Dân Đà Nẵng" <foo@example.com>',
-        to: dataSend.receiverEmail,
-        subject: "🔒 ĐẶT LẠI MẬT KHẨU - BỆNH VIỆN BÌNH DÂN",
-        html: htmlContent,
-    });
+    try {
+        await apiInstance.sendTransacEmail(sendSmtpEmail);
+        console.log('Forgot password email sent successfully');
+    } catch (error) {
+        console.error('Error sending forgot password email:', error);
+    }
 }
 
 module.exports = {

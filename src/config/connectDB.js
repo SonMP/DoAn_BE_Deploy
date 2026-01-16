@@ -1,53 +1,35 @@
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
+const configurations = require('./config');
+
 const env = process.env.NODE_ENV || 'development';
+const config = configurations[env];
 
 let sequelize;
 
-if (env === 'production') {
-    sequelize = new Sequelize(
-        process.env.DB_DATABASE_NAME,
-        process.env.DB_USERNAME,
-        process.env.DB_PASSWORD,
-        {
-            host: process.env.DB_HOST,
-            port: process.env.DB_PORT || 3306,
-            dialect: 'mysql',
-            logging: false,
-            query: { raw: true },
-            timezone: "+07:00",
-            dialectOptions: {
-                ssl: {
-                    require: true,
-                    rejectUnauthorized: false
-                },
-                dateStrings: true,
-                typeCast: true,
-                timezone: "+07:00"
-            }
-        }
-    );
+if (config.use_env_variable) {
+    sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {
-    sequelize = new Sequelize('quanlylichkham', 'root', null, {
-        host: 'localhost',
-        dialect: 'mysql',
-        timezone: "+07:00",
-        dialectOptions: {
-            dateStrings: true,
-            typeCast: true,
-            timezone: "+07:00"
-        },
-        logging: false
-    });
+    sequelize = new Sequelize(
+        config.database,
+        config.username,
+        config.password,
+        config
+    );
 }
 
 let connectDB = async () => {
     try {
         await sequelize.authenticate();
-        console.log(`Connection DB (${env}) has been established successfully.`);
+        console.log(`>>> Kết nối Database thành công!`);
+        console.log(`>>> Môi trường: [${env}]`);
+        console.log(`>>> Host: ${config.host}`);
     } catch (error) {
-        console.error('Unable to connect to the database:', error);
+        console.error('>>> Lỗi kết nối Database:', error);
+        if (env === 'development') {
+            console.log('Mẹo: Kiểm tra XAMPP/MySQL đã khởi động chưa?');
+        }
     }
 }
 
