@@ -48,6 +48,29 @@ let postBookAppointment = (data) => {
                 }
 
                 if (user) {
+                    // Check max booking limit
+                    let schedule = await db.LichTrinh.findOne({
+                        where: {
+                            maBacSi: data.doctorId,
+                            ngayHen: data.date,
+                            khungThoiGian: data.timeType
+                        },
+                        raw: false
+                    });
+
+                    if (schedule) {
+                        if (schedule.soLuongHienTai >= schedule.soLuongToiDa) {
+                            resolve({
+                                errCode: 3,
+                                errMessage: 'Khung giờ này đã đầy, vui lòng chọn khung giờ khác!'
+                            });
+                            return;
+                        }
+                    } else {
+                        // Fallback if schedule doesn't exist (though it should for a booking to be selectable)
+                        console.warn("Schedule not found during booking!");
+                    }
+
                     let token = uuidv4();
                     let [booking, createdBooking] = await db.DatLich.findOrCreate({
                         where: {
@@ -66,6 +89,12 @@ let postBookAppointment = (data) => {
                         }
                     });
                     if (createdBooking) {
+                        // Update soLuongHienTai in LichTrinh
+                        if (schedule) {
+                            schedule.soLuongHienTai = schedule.soLuongHienTai + 1;
+                            await schedule.save();
+                        }
+
                         await emailService.sendSimpleEmail({
                             receiverEmail: data.email,
                             patientName: data.fullName,
@@ -82,7 +111,7 @@ let postBookAppointment = (data) => {
                     } else {
                         resolve({
                             errCode: 2,
-                            errMessage: 'Lịch hẹn đã có sẵn!'
+                            errMessage: 'Bạn đã đặt lịch hẹn này rồi!'
                         })
                     }
 
@@ -324,6 +353,22 @@ let verifyCancelBooking = (data) => {
                 if (appointment) {
                     appointment.maTrangThai = 'S4';
                     await appointment.save();
+
+                    // Decrease soLuongHienTai in LichTrinh
+                    let schedule = await db.LichTrinh.findOne({
+                        where: {
+                            maBacSi: data.doctorId,
+                            ngayHen: appointment.ngayHen,
+                            khungThoiGian: appointment.khungThoiGian
+                        },
+                        raw: false
+                    });
+
+                    if (schedule) {
+                        schedule.soLuongHienTai = schedule.soLuongHienTai - 1;
+                        if (schedule.soLuongHienTai < 0) schedule.soLuongHienTai = 0;
+                        await schedule.save();
+                    }
 
                     resolve({
                         errCode: 0,
