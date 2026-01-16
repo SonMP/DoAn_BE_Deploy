@@ -1,4 +1,4 @@
-import Brevo from '@getbrevo/brevo';
+const Brevo = require('@getbrevo/brevo');
 require('dotenv').config();
 
 const apiInstance = new Brevo.TransactionalEmailsApi();
